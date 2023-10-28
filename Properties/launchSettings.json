@@ -1,0 +1,9 @@
+{
+  "profiles": {
+    "hpw_backend": {
+      "commandName": "Project",
+      "commandLineArgs": "--port 7234",
+      "launchBrowser": false
+    }
+  }
+}
