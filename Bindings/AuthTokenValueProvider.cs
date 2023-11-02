@@ -1,8 +1,10 @@
 using System;
+using System.Net.Http;
 using System.Threading.Tasks;
 using HPW.Entities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Azure.WebJobs.Host.Bindings;
+using Newtonsoft.Json;
 
 namespace HPW.Bindings
 {
@@ -10,7 +12,8 @@ namespace HPW.Bindings
     {
         private const string AuthHeaderName = "Authorization";
         private const string BearerPrefix = "Bearer ";
-        private const string ValidDomain = "dev-t3p4qo2dv6qmgfte.us.auth0.com";
+        //TODO: Extract this to the settings.json file
+        private const string UserInfoEndpoint = "https://dev-t3p4qo2dv6qmgfte.us.auth0.com/userinfo";
 
         private readonly HttpRequest _httpRequest;
 
@@ -27,7 +30,7 @@ namespace HPW.Bindings
                 && authorization.ToString().StartsWith(BearerPrefix))
             {
                 var idToken = authorization.ToString().Substring(BearerPrefix.Length);
-                return await GetUserFromGoogleJwtTokenAsync(idToken);
+                return await GetUserInfo(idToken);
             }
 
             return null;
@@ -35,33 +38,27 @@ namespace HPW.Bindings
 
         public string ToInvokeString()
         {
-            throw new NotImplementedException();
+            return String.Empty;
         }
 
-        private async Task<User> GetUserFromGoogleJwtTokenAsync(string token)
-        {
-            throw new NotImplementedException();
-            try
-            {
-                // var payload = await Google.Apis.Auth.GoogleJsonWebSignature.ValidateAsync(token, new ValidationSettings{
-                //     ExpirationTimeClockTolerance = new TimeSpan(24, 0, 0)
-                // });
-                // if (payload.HostedDomain != ValidDomain)
-                // {
-                //     return null;
-                // }
 
-                // return new User
-                // {
-                //     GoogleId = payload.Subject,
-                //     Email = payload.Email,
-                //     Name = payload.Name
-                // };
-            }
-            catch (Exception exception)
+        //TODO: Extract this to a Auth0 specific service, following the Adapter pattern and therefore isolating the third-party library from the rest.
+        private async Task<User> GetUserInfo(string token)
+        {
+
+            using HttpClient client = new();
+            client.DefaultRequestHeaders.TryAddWithoutValidation(AuthHeaderName, $"{BearerPrefix}{token}");
+            var response = await client.GetAsync(UserInfoEndpoint);
+            if (response.IsSuccessStatusCode)
             {
-                return null;
+                var json = await response.Content.ReadAsStringAsync();
+                return JsonConvert.DeserializeObject<User>(json);
             }
+            else
+            {
+                throw new Exception("Failed to get user info.");
+            }
+
         }
     }
 }
