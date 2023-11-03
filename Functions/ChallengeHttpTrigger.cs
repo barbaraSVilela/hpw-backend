@@ -11,17 +11,28 @@ using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using HPW.Bindings.Attributes;
 using HPW.Entities;
+using HPW.Services;
 
 namespace HPW.Functions
 {
-    public static class ChallengeHttpTrigger
+    public class ChallengeHttpTrigger
     {
+        private readonly IUserService _userService;
+        public ChallengeHttpTrigger(
+            IUserService userService
+        )
+        {
+            _userService = userService;
+        }
+
+
         [FunctionName("GetChallenge")]
-        public static async Task<IActionResult> Run(
+        public async Task<IActionResult> Run(
             [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "challenge")] HttpRequest req,
             ILogger log,
             [AuthToken] User user)
         {
+            var completeUser = _userService.CompleteUserInformation(user);
             // log.LogInformation("C# HTTP trigger function processed a request.");
 
             // string name = req.Query["name"];
@@ -36,9 +47,9 @@ namespace HPW.Functions
             //     ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
             //     : $"Hello, {name}. This HTTP triggered function executed successfully.";
 
-            var responseMessage = $"The logged user is: {user.Email}";
+            // var responseMessage = $"The logged user is: {user.Email}";
 
-            return new OkObjectResult(responseMessage);
+            return new OkObjectResult(completeUser);
         }
     }
 }
