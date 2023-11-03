@@ -6,12 +6,24 @@ namespace HPW.Entities
 {
     public class Challenge
     {
-        public int Id { get; set; }
-        public string Prompt { get; set; }
-        public int Level { get; set; }
-        public int Coins { get; set; }
-        public List<string> Solution { get; set; }
-        public List<string> Options { get; set; }
+        
+        [JsonProperty(PropertyName = "ChallengeId")]
+        public int id { get; set; }
+
+        [JsonProperty(PropertyName = "prompt")]
+        public string prompt { get; set; }
+
+        [JsonProperty(PropertyName = "level")]
+        public int level { get; set; }
+
+        [JsonProperty(PropertyName = "coins")] 
+        public int coins { get; set; }
+
+        [JsonProperty(PropertyName = "solution")]
+        public List<string> solution { get; set; }
+
+        [JsonProperty(PropertyName = "options")]
+        public List<string> options { get; set; }
     }
 }
 
