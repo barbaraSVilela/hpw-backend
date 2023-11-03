@@ -32,7 +32,7 @@ namespace HPW.Functions
             ILogger log,
             [AuthToken] User user)
         {
-            var completeUser = _userService.CompleteUserInformation(user);
+            var completeUser = await _userService.CompleteUserInformation(user);
             // log.LogInformation("C# HTTP trigger function processed a request.");
 
             // string name = req.Query["name"];
