@@ -6,6 +6,7 @@ namespace HPW.Entities
     {
         [JsonProperty(PropertyName = "ChallengeId")]
         public int challengeId { get; set; }
+
         public DateTime Date { get; set; }
 
     }

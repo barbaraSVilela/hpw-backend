@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace HPW.Entities
 {
@@ -8,22 +9,22 @@ namespace HPW.Entities
     {
         
         [JsonProperty(PropertyName = "ChallengeId")]
-        public int id { get; set; }
+        public int Id { get; set; }
 
         [JsonProperty(PropertyName = "prompt")]
-        public string prompt { get; set; }
+        public string Prompt { get; set; }
 
         [JsonProperty(PropertyName = "level")]
-        public int level { get; set; }
+        public int Level { get; set; }
 
         [JsonProperty(PropertyName = "coins")] 
-        public int coins { get; set; }
+        public int Coins { get; set; }
 
         [JsonProperty(PropertyName = "solution")]
-        public List<string> solution { get; set; }
+        public List<string> Solution { get; set; }
 
         [JsonProperty(PropertyName = "options")]
-        public List<string> options { get; set; }
+        public List<string> Options { get; set; }
     }
 }
 

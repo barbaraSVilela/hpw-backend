@@ -16,7 +16,7 @@ namespace HPW.Services
         private readonly Container _container;
         private const string UserPartitionKey = "id";
 
-        public UserService(Microsoft.Azure.Cosmos.Database database, DatabaseSettings cosmosStoreSettings)
+        public UserService(Microsoft.Azure.Cosmos.Database database)
         {
             _container = database.GetContainer("User");
         }
@@ -39,7 +39,7 @@ namespace HPW.Services
         private async Task<User> GetUserByEmail(String email)
         {
             //Define query
-            var query = _container.GetItemLinqQueryable<User>().ToFeedIterator();
+            var query = _container.GetItemLinqQueryable<User>().Where(u => u.Email == email).ToFeedIterator();
 
             return (await ExecuteUserQuery(query)).FirstOrDefault();
         }
@@ -55,7 +55,7 @@ namespace HPW.Services
                     Id = Guid.NewGuid().ToString(),
                     Coins = 0,
                     Email = user.Email,
-                    // Friends = new List<User>(),
+                    Friends = new List<User>(),
                     Invites = new List<Invite>(),
                     Level = 1,
                     Name = user.Name,
