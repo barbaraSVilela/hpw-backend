@@ -18,11 +18,14 @@ namespace HPW.Functions
     public class ChallengeHttpTrigger
     {
         private readonly IUserService _userService;
+        private readonly IDailyChallengeService _dailyChallengeService;
         public ChallengeHttpTrigger(
-            IUserService userService
+            IUserService userService,
+            IDailyChallengeService dailyChallengeService
         )
         {
             _userService = userService;
+            _dailyChallengeService = dailyChallengeService;
         }
 
 
@@ -32,24 +35,18 @@ namespace HPW.Functions
             ILogger log,
             [AuthToken] User user)
         {
+
+            if (user == null)
+            {
+                return new UnauthorizedObjectResult("Token not provided");
+            }
+
             var completeUser = await _userService.CompleteUserInformation(user);
-            // log.LogInformation("C# HTTP trigger function processed a request.");
-
-            // string name = req.Query["name"];
-
-            // string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            // dynamic data = JsonConvert.DeserializeObject(requestBody);
-            // name = name ?? data?.name;
 
 
+            var todaysChallenge = await _dailyChallengeService.GetTodaysChallenge(completeUser.Level);
 
-            // string responseMessage = string.IsNullOrEmpty(name)
-            //     ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-            //     : $"Hello, {name}. This HTTP triggered function executed successfully.";
-
-            // var responseMessage = $"The logged user is: {user.Email}";
-
-            return new OkObjectResult(completeUser);
+            return new OkObjectResult(todaysChallenge);
         }
     }
 }

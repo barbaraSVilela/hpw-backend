@@ -11,5 +11,7 @@ namespace HPW.Services
         Task<List<Challenge>> GetAllChallenges();
         Task<Challenge> GetChallenge(int challengeId);
 
+        Task<Dictionary<int, List<Challenge>>> GetAllChallengesSplitByLevel();
+
     }
 }

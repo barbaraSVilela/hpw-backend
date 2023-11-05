@@ -14,19 +14,23 @@ namespace HPW.Services
     class ChallengeService : IChallengeService
     {
         private readonly Container _challengeContainer;
-        public ChallengeService(Microsoft.Azure.Cosmos.Database database){
+        public ChallengeService(Microsoft.Azure.Cosmos.Database database)
+        {
             _challengeContainer = database.GetContainer("Challenge");
         }
 
-        public async Task<Challenge> GetChallenge(int challengeId){
+        public async Task<Challenge> GetChallenge(int challengeId)
+        {
             var query = _challengeContainer.GetItemLinqQueryable<Challenge>().Where(c => c.Id == challengeId).ToFeedIterator();
 
-            return (await ExecuteChallengeQuery(query)).FirstOrDefault();        }
-        public async Task<List<Challenge>> GetAllChallenges(){
+            return (await ExecuteChallengeQuery(query)).FirstOrDefault();
+        }
+        public async Task<List<Challenge>> GetAllChallenges()
+        {
             var query = _challengeContainer.GetItemLinqQueryable<Challenge>().ToFeedIterator();
 
-            return (await ExecuteChallengeQuery(query)).ToList();        
-               }
+            return (await ExecuteChallengeQuery(query)).ToList();
+        }
 
 
         private async Task<IEnumerable<Challenge>> ExecuteChallengeQuery(FeedIterator<Challenge> query)
@@ -35,7 +39,24 @@ namespace HPW.Services
             return response;
 
         }
-        
+
+        public async Task<Dictionary<int, List<Challenge>>> GetAllChallengesSplitByLevel()
+        {
+            var challenges = await GetAllChallenges();
+            var result = new Dictionary<int, List<Challenge>>();
+
+            foreach (var challenge in challenges)
+            {
+                var level = challenge.Level;
+                if (result[level] == null)
+                {
+                    result[level] = new List<Challenge>();
+                }
+
+                result[level].Add(challenge);
+            }
+            return result;
+        }
     }
-    
+
 }
