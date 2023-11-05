@@ -1,16 +1,23 @@
-using System;
+using HPW.Services;
 using Microsoft.Azure.WebJobs;
-using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 
 namespace HPW.Functions
 {
     public class DailyChallengeTimerTrigger
     {
-        [FunctionName("DailyChallengeTimerTrigger")]
-        public void Run([TimerTrigger("0 0 0 * * ?")]TimerInfo myTimer, ILogger log)
+        private readonly IDailyChallengeService _dailyChallengeService;
+
+        public DailyChallengeTimerTrigger(IDailyChallengeService dailyChallengeService)
         {
-            log.LogInformation($"C# Timer trigger function executed at: {DateTime.Now}");
+            _dailyChallengeService = dailyChallengeService;
+        }
+
+
+        [FunctionName("DailyChallengeTimerTrigger")]
+        public void Run([TimerTrigger("0 0 0 * * ?")] TimerInfo myTimer, ILogger log)
+        {
+            _dailyChallengeService.SetTodaysChallenges();
         }
     }
 }
