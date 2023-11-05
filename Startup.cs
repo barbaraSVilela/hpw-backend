@@ -6,7 +6,6 @@ using Microsoft.Azure.WebJobs.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using HPW.Database;
 using HPW.Services;
-using Newtonsoft.Json;
 
 [assembly: WebJobsStartup(typeof(Startup))]
 
@@ -30,6 +29,8 @@ namespace HPW
 
 
             services.AddSingleton<IUserService, UserService>();
+            services.AddSingleton<IChallengeService, ChallengeService>();
+            services.AddSingleton<IDailyChallengeService, DailyChallengeService>();
 
         }
     }

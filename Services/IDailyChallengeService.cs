@@ -6,10 +6,9 @@ using System.Threading.Tasks;
 
 namespace HPW.Services
 {
-    public interface IChallengeService
+    public interface IDailyChallengeService
     {
-        Task<List<Challenge>> GetAllChallenges();
-        Task<Challenge> GetChallenge(int challengeId);
-
+        Task<DailyChallenge> GetTodaysChallenge(int level);
+        Task SetTodaysChallenges();
     }
 }
