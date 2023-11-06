@@ -36,8 +36,6 @@ namespace HPW.Functions
             [AuthToken] User user)
         {
 
-            return new ConflictObjectResult("Test!");
-
             if (user == null)
             {
                 return new UnauthorizedObjectResult("Token not provided");
