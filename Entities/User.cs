@@ -16,11 +16,11 @@ namespace HPW.Entities
 
         [JsonProperty(PropertyName = "streak")]
         public int Streak { get; set; }
-        
-        [JsonProperty(PropertyName = "streak")]
+
+        [JsonProperty(PropertyName = "level")]
         public int Level { get; set; }
-        
-        [JsonProperty(PropertyName = "coins")]     
+
+        [JsonProperty(PropertyName = "coins")]
         public int Coins { get; set; }
 
         [JsonProperty(PropertyName = "friends")]

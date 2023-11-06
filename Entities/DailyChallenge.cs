@@ -5,8 +5,12 @@ namespace HPW.Entities
 {
     public class DailyChallenge
     {
-        [JsonProperty(PropertyName = "ChallengeId")]
-        public int ChallengeId { get; set; }
+
+        [JsonProperty(PropertyName = "id")]
+        public string Id { get; set; }
+
+        [JsonProperty(PropertyName = "challengeId")]
+        public string ChallengeId { get; set; }
 
         [JsonProperty(PropertyName = "date")]
         public DateTime Date { get; set; }

@@ -19,7 +19,7 @@ namespace HPW.Services
             _challengeContainer = database.GetContainer("Challenge");
         }
 
-        public async Task<Challenge> GetChallenge(int challengeId)
+        public async Task<Challenge> GetChallenge(string challengeId)
         {
             var query = _challengeContainer.GetItemLinqQueryable<Challenge>().Where(c => c.Id == challengeId).ToFeedIterator();
 
@@ -48,11 +48,10 @@ namespace HPW.Services
             foreach (var challenge in challenges)
             {
                 var level = challenge.Level;
-                if (result[level] == null)
+                if (!result.ContainsKey(level))
                 {
-                    result[level] = new List<Challenge>();
+                    result.Add(level, new List<Challenge>());
                 }
-
                 result[level].Add(challenge);
             }
             return result;

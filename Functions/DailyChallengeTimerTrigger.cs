@@ -1,5 +1,9 @@
+using System.Threading.Tasks;
 using HPW.Services;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
+using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Extensions.Logging;
 
 namespace HPW.Functions
@@ -15,9 +19,9 @@ namespace HPW.Functions
 
 
         [FunctionName("DailyChallengeTimerTrigger")]
-        public void Run([TimerTrigger("0 0 0 * * ?")] TimerInfo myTimer, ILogger log)
+        public async Task Run([TimerTrigger("0 0 0 * * *")] TimerInfo myTimer, ILogger log)
         {
-            _dailyChallengeService.SetTodaysChallenges();
+            await _dailyChallengeService.SetTodaysChallenges();
         }
     }
 }

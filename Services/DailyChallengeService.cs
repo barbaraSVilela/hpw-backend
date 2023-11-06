@@ -55,12 +55,15 @@ namespace HPW.Services
             {
                 var dailyChallenge = new DailyChallenge()
                 {
+                    Id = Guid.NewGuid().ToString(),
                     ChallengeId = challenge.Value.Id,
                     Date = DateTime.Today,
                     Level = challenge.Value.Level,
                 };
 
                 await _container.UpsertItemAsync(dailyChallenge, new PartitionKey(dailyChallenge.ChallengeId));
+
+
             }
         }
 

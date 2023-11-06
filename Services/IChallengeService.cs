@@ -9,7 +9,7 @@ namespace HPW.Services
     public interface IChallengeService
     {
         Task<List<Challenge>> GetAllChallenges();
-        Task<Challenge> GetChallenge(int challengeId);
+        Task<Challenge> GetChallenge(string challengeId);
 
         Task<Dictionary<int, List<Challenge>>> GetAllChallengesSplitByLevel();
 
