@@ -8,7 +8,7 @@ namespace HPW.Entities
     public class Challenge
     {
 
-        [JsonProperty(PropertyName = "ChallengeId")]
+        [JsonProperty(PropertyName = "id")]
         public string Id { get; set; }
 
         [JsonProperty(PropertyName = "prompt")]
