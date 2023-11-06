@@ -35,16 +35,20 @@ namespace HPW.Functions
             ILogger log,
             [AuthToken] User user)
         {
-
+            log.LogInformation("entered function");
             if (user == null)
             {
+                log.LogInformation("user is null");
                 return new UnauthorizedObjectResult("Token not provided");
             }
 
             var completeUser = await _userService.CompleteUserInformation(user);
+            log.LogInformation("get user worked", completeUser);
 
 
             var todaysChallenge = await _dailyChallengeService.GetTodaysChallenge(completeUser.Level);
+
+            log.LogInformation("today challenge", todaysChallenge);
 
             return new OkObjectResult(todaysChallenge);
         }
