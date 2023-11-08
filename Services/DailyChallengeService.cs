@@ -23,8 +23,10 @@ namespace HPW.Services
 
         public async Task<Challenge> GetTodaysChallenge(int level)
         {
-            var query = _container.GetItemLinqQueryable<DailyChallenge>().Where(c => c.Date == DateTime.Today).ToFeedIterator();
-            var result = await ExecuteDailyChallengeQuery(query);
+
+            var allChallenges = await ExecuteDailyChallengeQuery(_container.GetItemLinqQueryable<DailyChallenge>().ToFeedIterator());
+
+            var result = allChallenges.Where(c => c.Date.ToUniversalTime().Date == DateTime.Now.ToUniversalTime().Date);
 
             var challenge = result.FirstOrDefault(c => c.Level == level);
             if (challenge != null)
