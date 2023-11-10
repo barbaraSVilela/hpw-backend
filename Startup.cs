@@ -31,6 +31,7 @@ namespace HPW
             services.AddSingleton<IUserService, UserService>();
             services.AddSingleton<IChallengeService, ChallengeService>();
             services.AddSingleton<IDailyChallengeService, DailyChallengeService>();
+            services.AddSingleton<IRewardService, RewardService>();
 
         }
     }
