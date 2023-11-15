@@ -31,12 +31,12 @@ namespace HPW.Services
             var date = DateTime.Now.ToUniversalTime().Date;
             var allChallenges = await ExecuteDailyChallengeQuery(_container.GetItemLinqQueryable<DailyChallenge>().ToFeedIterator());
 
-            if (user.SolvedChallenges.ContainsKey(date))
+            if (user.SolvedChallenges != null && user.SolvedChallenges.ContainsKey(date))
             {
                 var id = user.SolvedChallenges[date];
                 return await _challengeService.GetChallenge(id);
             }
-            else if (user.FailedChallenges.ContainsKey(date))
+            else if (user.FailedChallenges != null && user.FailedChallenges.ContainsKey(date))
             {
                 var id = user.FailedChallenges[date];
                 return await _challengeService.GetChallenge(id);
