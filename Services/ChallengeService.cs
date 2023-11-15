@@ -56,6 +56,19 @@ namespace HPW.Services
             }
             return result;
         }
+
+        public async Task AddHelpTip(string challengeId, string tip)
+        {
+            var challenge = await GetChallenge(challengeId);
+
+            if (challenge.HelpTips == null)
+            {
+                challenge.HelpTips = new List<string>();
+            }
+            challenge.HelpTips.Add(tip);
+
+            await _challengeContainer.ReplaceItemAsync(challenge, challengeId, new PartitionKey(challengeId));
+        }
     }
 
 }

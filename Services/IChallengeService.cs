@@ -13,5 +13,7 @@ namespace HPW.Services
 
         Task<Dictionary<int, List<Challenge>>> GetAllChallengesSplitByLevel();
 
+        Task AddHelpTip(string challengeId, string tip);
+
     }
 }

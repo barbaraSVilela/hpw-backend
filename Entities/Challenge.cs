@@ -25,6 +25,9 @@ namespace HPW.Entities
 
         [JsonProperty(PropertyName = "options")]
         public List<string> Options { get; set; }
+
+        [JsonProperty(PropertyName = "helpTips")]
+        public List<string> HelpTips { get; set; }
     }
 }
 
