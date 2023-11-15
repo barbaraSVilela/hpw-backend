@@ -48,5 +48,27 @@ namespace HPW.Functions
 
             return new OkObjectResult(todaysChallenge);
         }
+
+        [FunctionName("SolveChallenge")]
+        public async Task<IActionResult> SolveChallenge(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "solve")] HttpRequest req,
+            ILogger log,
+            [AuthToken] User user)
+        {
+
+            if (user == null)
+            {
+                return new UnauthorizedObjectResult("Token not provided");
+            }
+
+            var wasSuccessful = bool.Parse(req.Query["wasSuccessful"]);
+
+            var completeUser = await _userService.CompleteUserInformation(user);
+
+
+            var updatedUser = await _dailyChallengeService.SolveTodaysChallenge(completeUser, wasSuccessful);
+
+            return new OkObjectResult(updatedUser);
+        }
     }
 }

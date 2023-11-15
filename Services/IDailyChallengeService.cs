@@ -10,5 +10,6 @@ namespace HPW.Services
     {
         Task<Challenge> GetTodaysChallenge(int level);
         Task SetTodaysChallenges();
+        Task<User> SolveTodaysChallenge(User user, bool wasSuccessful);
     }
 }

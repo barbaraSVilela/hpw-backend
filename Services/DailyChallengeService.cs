@@ -14,10 +14,15 @@ namespace HPW.Services
     public class DailyChallengeService : IDailyChallengeService
     {
         private readonly IChallengeService _challengeService;
+        private readonly IUserService _userService;
         private readonly Container _container;
-        public DailyChallengeService(IChallengeService challengeService, Microsoft.Azure.Cosmos.Database database)
+        public DailyChallengeService(
+            IChallengeService challengeService,
+            Microsoft.Azure.Cosmos.Database database,
+            IUserService userService)
         {
             _challengeService = challengeService;
+            _userService = userService;
             _container = database.GetContainer("DailyChallenge");
         }
 
@@ -69,6 +74,29 @@ namespace HPW.Services
             }
         }
 
+        public async Task<Entities.User> SolveTodaysChallenge(Entities.User user, bool wasSuccessful)
+        {
+
+            if (wasSuccessful)
+            {
+                if (user.SolvedChallengesIds == null)
+                {
+                    user.SolvedChallengesIds = new List<string>();
+                }
+
+                var todaysChallenge = await GetTodaysChallenge(user.Level);
+                user.SolvedChallengesIds.Add(todaysChallenge.Id);
+                user.Level++;
+                user.Streak++;
+            }
+            else
+            {
+                user.Streak = 0;
+            }
+
+            return await _userService.UpdateUser(user);
+
+        }
 
         private async Task<IEnumerable<DailyChallenge>> ExecuteDailyChallengeQuery(FeedIterator<DailyChallenge> query)
         {

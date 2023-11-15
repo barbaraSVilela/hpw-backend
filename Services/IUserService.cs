@@ -6,5 +6,7 @@ namespace HPW.Services
     public interface IUserService
     {
         Task<User> CompleteUserInformation(User incompleteUser);
+
+        Task<User> UpdateUser(User updatedUser);
     }
 }

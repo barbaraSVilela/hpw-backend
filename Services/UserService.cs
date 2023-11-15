@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using HPW.Database;
 using HPW.Entities;
@@ -71,11 +72,25 @@ namespace HPW.Services
             }
         }
 
+
+
         private async Task<IEnumerable<User>> ExecuteUserQuery(FeedIterator<User> query)
         {
             var response = await query.ReadAllAsync();
             return response;
 
+        }
+
+        public async Task<User> UpdateUser(User updatedUser)
+        {
+            var result = await _container.ReplaceItemAsync(updatedUser, updatedUser.Id, new PartitionKey(updatedUser.Id));
+
+            if (result.StatusCode != HttpStatusCode.OK)
+            {
+                throw new Exception();
+            }
+
+            return result.Resource;
         }
     }
 }

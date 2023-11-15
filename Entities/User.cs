@@ -31,5 +31,8 @@ namespace HPW.Entities
 
         [JsonProperty(PropertyName = "invites")]
         public List<Invite> Invites { get; set; }
+
+        [JsonProperty(PropertyName = "solvedChallenges")]
+        public List<String> SolvedChallengesIds { get; set; }
     }
 }
