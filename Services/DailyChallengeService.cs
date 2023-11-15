@@ -77,6 +77,7 @@ namespace HPW.Services
         public async Task<Entities.User> SolveTodaysChallenge(Entities.User user, bool wasSuccessful)
         {
 
+            var todaysChallenge = await GetTodaysChallenge(user.Level);
             if (wasSuccessful)
             {
                 if (user.SolvedChallengesIds == null)
@@ -84,14 +85,19 @@ namespace HPW.Services
                     user.SolvedChallengesIds = new List<string>();
                 }
 
-                var todaysChallenge = await GetTodaysChallenge(user.Level);
                 user.SolvedChallengesIds.Add(todaysChallenge.Id);
                 user.Level++;
                 user.Streak++;
             }
             else
             {
+                if (user.FailedChallengesIds == null)
+                {
+                    user.FailedChallengesIds = new List<string>();
+                }
+                user.FailedChallengesIds.Add(todaysChallenge.Id);
                 user.Streak = 0;
+
             }
 
             return await _userService.UpdateUser(user);
