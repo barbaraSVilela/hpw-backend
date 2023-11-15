@@ -8,7 +8,7 @@ namespace HPW.Services
 {
     public interface IDailyChallengeService
     {
-        Task<Challenge> GetTodaysChallenge(int level);
+        Task<Challenge> GetTodaysChallenge(User user);
         Task SetTodaysChallenges();
         Task<User> SolveTodaysChallenge(User user, bool wasSuccessful);
     }

@@ -26,14 +26,25 @@ namespace HPW.Services
             _container = database.GetContainer("DailyChallenge");
         }
 
-        public async Task<Challenge> GetTodaysChallenge(int level)
+        public async Task<Challenge> GetTodaysChallenge(Entities.User user)
         {
-
+            var date = DateTime.Now.ToUniversalTime().Date;
             var allChallenges = await ExecuteDailyChallengeQuery(_container.GetItemLinqQueryable<DailyChallenge>().ToFeedIterator());
+
+            if (user.SolvedChallenges.ContainsKey(date))
+            {
+                var id = user.SolvedChallenges[date];
+                return await _challengeService.GetChallenge(id);
+            }
+            else if (user.FailedChallenges.ContainsKey(date))
+            {
+                var id = user.FailedChallenges[date];
+                return await _challengeService.GetChallenge(id);
+            }
 
             var result = allChallenges.Where(c => c.Date.ToUniversalTime().Date == DateTime.Now.ToUniversalTime().Date);
 
-            var challenge = result.FirstOrDefault(c => c.Level == level);
+            var challenge = result.FirstOrDefault(c => c.Level == user.Level);
             if (challenge != null)
             {
                 return await _challengeService.GetChallenge(challenge.ChallengeId);
@@ -77,25 +88,26 @@ namespace HPW.Services
         public async Task<Entities.User> SolveTodaysChallenge(Entities.User user, bool wasSuccessful)
         {
 
-            var todaysChallenge = await GetTodaysChallenge(user.Level);
+            var todaysChallenge = await GetTodaysChallenge(user);
+            var date = DateTime.Now.ToUniversalTime().Date;
             if (wasSuccessful)
             {
-                if (user.SolvedChallengesIds == null)
+                if (user.SolvedChallenges == null)
                 {
-                    user.SolvedChallengesIds = new List<string>();
+                    user.SolvedChallenges = new Dictionary<DateTime, string>();
                 }
 
-                user.SolvedChallengesIds.Add(todaysChallenge.Id);
+                user.SolvedChallenges.Add(date, todaysChallenge.Id);
                 user.Level++;
                 user.Streak++;
             }
             else
             {
-                if (user.FailedChallengesIds == null)
+                if (user.FailedChallenges == null)
                 {
-                    user.FailedChallengesIds = new List<string>();
+                    user.FailedChallenges = new Dictionary<DateTime, string>();
                 }
-                user.FailedChallengesIds.Add(todaysChallenge.Id);
+                user.FailedChallenges.Add(date, todaysChallenge.Id);
                 user.Streak = 0;
 
             }

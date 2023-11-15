@@ -44,7 +44,12 @@ namespace HPW.Functions
             var completeUser = await _userService.CompleteUserInformation(user);
 
 
-            var todaysChallenge = await _dailyChallengeService.GetTodaysChallenge(completeUser.Level);
+            var todaysChallenge = await _dailyChallengeService.GetTodaysChallenge(completeUser);
+
+            if (todaysChallenge == null)
+            {
+                return new BadRequestObjectResult("Sorry, no challenges were found for you today. Check again tomorrow!");
+            }
 
             return new OkObjectResult(todaysChallenge);
         }

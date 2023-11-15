@@ -33,9 +33,9 @@ namespace HPW.Entities
         public List<Invite> Invites { get; set; }
 
         [JsonProperty(PropertyName = "solvedChallenges")]
-        public List<String> SolvedChallengesIds { get; set; }
+        public Dictionary<DateTime, string> SolvedChallenges { get; set; }
 
         [JsonProperty(PropertyName = "failedChallenges")]
-        public List<String> FailedChallengesIds { get; set; }
+        public Dictionary<DateTime, string> FailedChallenges { get; set; }
     }
 }
