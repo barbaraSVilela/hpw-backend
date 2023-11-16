@@ -33,10 +33,11 @@ namespace HPW.Functions
         public async Task<IActionResult> SendHelp(
             [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "help")] HttpRequest req,
             ILogger log,
-            [AuthToken] User user,
-            [FromQuery] string data,
-            [FromQuery] string challengeId)
+            [AuthToken] User user
+             )
         {
+            string data = req.Query["data"];
+            string challengeId = req.Query["challengeId"];
 
             if (user == null)
             {
