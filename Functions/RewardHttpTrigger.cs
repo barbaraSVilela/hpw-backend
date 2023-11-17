@@ -18,11 +18,14 @@ namespace HPW.Functions
     public class RewardHttpTrigger
     {
         private readonly IRewardService _rewardService;
+        private readonly IUserService _userService;
         public RewardHttpTrigger(
-            IRewardService rewardService
+            IRewardService rewardService,
+            IUserService userService
         )
         {
             _rewardService = rewardService;
+            _userService = userService;
         }
 
 
@@ -36,6 +39,30 @@ namespace HPW.Functions
 
 
             return new OkObjectResult(rewards);
+        }
+
+        [FunctionName("PurchaseReward")]
+        public async Task<IActionResult> PurchaseReward(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "post", Route = "purchase")] HttpRequest req,
+            ILogger log,
+            [AuthToken] User user)
+        {
+            if (user == null)
+            {
+                return new UnauthorizedObjectResult("Token not provided");
+            }
+            var completeUser = await _userService.CompleteUserInformation(user);
+            var rewardId = req.Query["rewardId"];
+
+            try
+            {
+                var updatedUser = await _rewardService.PurchaseReward(rewardId, completeUser);
+                return new OkObjectResult(updatedUser);
+            }
+            catch (Exception e)
+            {
+                return new BadRequestObjectResult(e.Message);
+            }
         }
     }
 }
