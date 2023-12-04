@@ -126,16 +126,23 @@ namespace HPW.Services
 
             var newFriend = await GetUserById(invite.FromUserId);
 
-            if (currentUser.Friends != null)
+            if (currentUser.Friends == null)
             {
                 currentUser.Friends = new List<User>();
             }
 
+            if (newFriend.Friends == null)
+            {
+                newFriend.Friends = new List<User>();
+            }
+
             currentUser.Friends.Add(newFriend);
+            newFriend.Friends.Add(currentUser);
 
             currentUser.Invites.Remove(invite);
 
             await UpdateUser(currentUser);
+            await UpdateUser(newFriend);
         }
     }
 }
