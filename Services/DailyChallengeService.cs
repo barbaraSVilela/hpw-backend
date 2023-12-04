@@ -100,6 +100,7 @@ namespace HPW.Services
                 user.SolvedChallenges.Add(date, todaysChallenge.Id);
                 user.Level++;
                 user.Streak++;
+                user.Coins = user.Coins + 100;
             }
             else
             {
