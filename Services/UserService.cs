@@ -45,6 +45,12 @@ namespace HPW.Services
             return (await ExecuteUserQuery(query)).FirstOrDefault();
         }
 
+        private async Task<User> GetUserById(String id)
+        {
+            var query = _container.GetItemLinqQueryable<User>().Where(u => u.Id == id).ToFeedIterator();
+            return (await ExecuteUserQuery(query)).FirstOrDefault();
+        }
+
         private async Task<User> CreateUser(User user)
         {
 
@@ -91,6 +97,45 @@ namespace HPW.Services
             }
 
             return result.Resource;
+        }
+
+        public async Task SendInvite(String invitedUserId, User currentUser)
+        {
+            var invitedUser = await GetUserById(invitedUserId);
+
+            var invite = new Invite()
+            {
+                FromUserId = currentUser.Id,
+                ToUserId = invitedUser.Id,
+                Id = Guid.NewGuid().ToString()
+            };
+
+            if (invitedUser.Invites == null)
+            {
+                invitedUser.Invites = new List<Invite>();
+            }
+
+            invitedUser.Invites.Add(invite);
+
+            await UpdateUser(invitedUser);
+        }
+
+        public async Task AcceptInvite(String inviteId, User currentUser)
+        {
+            var invite = currentUser.Invites.First(i => i.Id == inviteId);
+
+            var newFriend = await GetUserById(invite.FromUserId);
+
+            if (currentUser.Friends != null)
+            {
+                currentUser.Friends = new List<User>();
+            }
+
+            currentUser.Friends.Add(newFriend);
+
+            currentUser.Invites.Remove(invite);
+
+            await UpdateUser(currentUser);
         }
     }
 }

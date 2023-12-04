@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using HPW.Entities;
 
@@ -8,5 +9,9 @@ namespace HPW.Services
         Task<User> CompleteUserInformation(User incompleteUser);
 
         Task<User> UpdateUser(User updatedUser);
+
+        Task SendInvite(String invitedUserId, User currentUser);
+
+        Task AcceptInvite(String inviteId, User currentUser);
     }
 }
