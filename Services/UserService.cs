@@ -45,7 +45,7 @@ namespace HPW.Services
             return (await ExecuteUserQuery(query)).FirstOrDefault();
         }
 
-        private async Task<User> GetUserById(String id)
+        public async Task<User> GetUserById(String id)
         {
             var query = _container.GetItemLinqQueryable<User>().Where(u => u.Id == id).ToFeedIterator();
             return (await ExecuteUserQuery(query)).FirstOrDefault();

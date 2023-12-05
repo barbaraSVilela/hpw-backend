@@ -17,5 +17,7 @@ namespace HPW.Services
 
         Task<IEnumerable<User>> GetFriends(User currentUser);
 
+        Task<User> GetUserById(String id);
+
     }
 }

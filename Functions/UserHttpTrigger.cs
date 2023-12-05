@@ -83,8 +83,26 @@ namespace HPW.Functions
 
             var completeUser = await _userService.CompleteUserInformation(user);
 
-
             var result = await _userService.GetFriends(completeUser);
+
+            return new OkObjectResult(result);
+        }
+
+        [FunctionName("GetUserById")]
+        public async Task<IActionResult> GetUserById(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "friends")] HttpRequest req,
+            ILogger log,
+            [AuthToken] User user)
+        {
+
+            if (user == null)
+            {
+                return new UnauthorizedObjectResult("Token not provided");
+            }
+
+            var toUserId = req.Query["userId"];
+
+            var result = await _userService.GetUserById(toUserId);
 
             return new OkObjectResult(result);
         }
