@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using HPW.Entities;
 
@@ -13,5 +14,8 @@ namespace HPW.Services
         Task SendInvite(String invitedUserId, User currentUser);
 
         Task AcceptInvite(String inviteId, User currentUser);
+
+        Task<IEnumerable<User>> GetFriends(User currentUser);
+
     }
 }

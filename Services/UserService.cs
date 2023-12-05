@@ -144,5 +144,19 @@ namespace HPW.Services
             await UpdateUser(currentUser);
             await UpdateUser(newFriend);
         }
+
+        public async Task<IEnumerable<User>> GetFriends(User currentUser)
+        {
+            var result = new List<User>();
+
+            foreach (var id in currentUser.Friends)
+            {
+                var friend = await GetUserById(id);
+                result.Add(friend);
+            }
+
+            return result;
+
+        }
     }
 }

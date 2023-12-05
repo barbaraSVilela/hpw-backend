@@ -69,5 +69,25 @@ namespace HPW.Functions
             return new OkResult();
         }
 
+        [FunctionName("GetFriends")]
+        public async Task<IActionResult> GetFriends(
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "friends")] HttpRequest req,
+            ILogger log,
+            [AuthToken] User user)
+        {
+
+            if (user == null)
+            {
+                return new UnauthorizedObjectResult("Token not provided");
+            }
+
+            var completeUser = await _userService.CompleteUserInformation(user);
+
+
+            var result = await _userService.GetFriends(completeUser);
+
+            return new OkObjectResult(result);
+        }
+
     }
 }
