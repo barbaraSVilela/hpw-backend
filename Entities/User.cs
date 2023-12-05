@@ -24,7 +24,7 @@ namespace HPW.Entities
         public int Coins { get; set; }
 
         [JsonProperty(PropertyName = "friends")]
-        public List<User> Friends { get; set; }
+        public List<String> Friends { get; set; }
 
         [JsonProperty(PropertyName = "rewards")]
         public List<Reward> Rewards { get; set; }

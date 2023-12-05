@@ -62,7 +62,7 @@ namespace HPW.Services
                     Id = Guid.NewGuid().ToString(),
                     Coins = 0,
                     Email = user.Email,
-                    Friends = new List<User>(),
+                    Friends = new List<String>(),
                     Invites = new List<Invite>(),
                     Level = 1,
                     Name = user.Name,
@@ -128,16 +128,16 @@ namespace HPW.Services
 
             if (currentUser.Friends == null)
             {
-                currentUser.Friends = new List<User>();
+                currentUser.Friends = new List<String>();
             }
 
             if (newFriend.Friends == null)
             {
-                newFriend.Friends = new List<User>();
+                newFriend.Friends = new List<String>();
             }
 
-            currentUser.Friends.Add(newFriend);
-            newFriend.Friends.Add(currentUser);
+            currentUser.Friends.Add(newFriend.Id);
+            newFriend.Friends.Add(currentUser.Id);
 
             currentUser.Invites.Remove(invite);
 
