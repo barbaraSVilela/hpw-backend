@@ -90,7 +90,7 @@ namespace HPW.Functions
 
         [FunctionName("GetUserById")]
         public async Task<IActionResult> GetUserById(
-            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "friends")] HttpRequest req,
+            [HttpTrigger(AuthorizationLevel.Anonymous, "get", Route = "user-by-id")] HttpRequest req,
             ILogger log,
             [AuthToken] User user)
         {
